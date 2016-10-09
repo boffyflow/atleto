@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QueryWidget</class>
+ <widget class="QWidget" name="QueryWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>585</width>
+    <height>41</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="1,0">
+   <property name="margin">
+    <number>3</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="periodCombo">
+       <property name="styleSheet">
+        <string>QWidget { background:none}</string>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>All dates</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>This week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>This month</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>This year</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Last week</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Last month</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Last year</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Last</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Custom dates</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Custom date through today</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="numUnitsEdit">
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string>QWidget { background:none}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="unitsCombo">
+       <property name="styleSheet">
+        <string>QWidget { background:none}</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>days</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>weeks</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>months</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>years</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fromLabel">
+       <property name="text">
+        <string>From:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateEdit" name="fromDate">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="styleSheet">
+        <string>QWidget { background:none}</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="toLabel">
+       <property name="text">
+        <string>To:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateEdit" name="toDate">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="styleSheet">
+        <string>QWidget { background:none}</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QComboBox" name="filterCombo">
+       <item>
+        <property name="text">
+         <string>Add filter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Location</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Distance</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Time</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="filterWidget" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
