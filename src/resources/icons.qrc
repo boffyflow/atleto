@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/main/icons">
+        <file>report.png</file>
+        <file>athlete.png</file>
+        <file>editor2.png</file>
+        <file>cal.png</file>
+        <file alias="weather2">mcloudy.png</file>
+        <file alias="weather1">pcloudy.png</file>
+        <file alias="weather5">rain.png</file>
+        <file alias="weather7">rainsnow.png</file>
+        <file alias="weather9">snow.png</file>
+        <file alias="weather8">snowshowers.png</file>
+        <file alias="weather0">sunny.png</file>
+        <file alias="weather6">tstorm.png</file>
+        <file alias="weather4">wind.png</file>
+        <file alias="weather3">cloudy.png</file>
+        <file>rightarrow.png</file>
+        <file>leftarrow.png</file>
+        <file>runner32.xpm</file>
+        <file>runner.xpm</file>
+        <file>close.png</file>
+        <file>down.png</file>
+        <file>up.png</file>
+        <file>edit_add.png</file>
+        <file>edit_remove.png</file>
+        <file>filesave.png</file>
+        <file>find.png</file>
+        <file>journal.png</file>
+        <file>trophy.xpm</file>
+    </qresource>
+</RCC>

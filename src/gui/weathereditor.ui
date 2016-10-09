@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WeatherEditor</class>
+ <widget class="QDialog" name="WeatherEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>268</width>
+    <height>147</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Sky</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="skyCombo">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>sunny</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather0</normaloff>:/main/icons/weather0</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>partly cloudy</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather1</normaloff>:/main/icons/weather1</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mostly cloudy</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather2</normaloff>:/main/icons/weather2</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cloudy</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather3</normaloff>:/main/icons/weather3</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>windy</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather4</normaloff>:/main/icons/weather4</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rain</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather5</normaloff>:/main/icons/weather5</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>thunderstorm</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather6</normaloff>:/main/icons/weather6</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rain and snow</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather7</normaloff>:/main/icons/weather7</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>snow shower</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather8</normaloff>:/main/icons/weather8</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>snow</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/main/icons/weather9</normaloff>:/main/icons/weather9</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Temperature</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="TemperatureLineEdit" name="tempEdit"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Comment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="notesEdit"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>199</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="deleteButton">
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TemperatureLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/gui/temperaturelineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>WeatherEditor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>WeatherEditor</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
