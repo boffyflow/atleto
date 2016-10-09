@@ -6,7 +6,7 @@ Athlete* Athlete::instance = NULL;
 Athlete::Athlete()
 {
     // mName = QString();
-    mHeight = 1.80;
+    mHeight = 1.85;
 }
 
 Athlete* Athlete::getInstance()
