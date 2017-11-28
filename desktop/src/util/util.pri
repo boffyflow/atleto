@@ -3,6 +3,7 @@
 SOURCES += src/util/unitstring.cpp \
     src/util/units.cpp \
     src/util/cgeneral.cpp \
+    src/util/csvimporter.cpp \
     src/util/rununits.cpp \
     src/util/lengthunits.cpp \
     src/util/heightunits.cpp \
@@ -23,6 +24,7 @@ SOURCES += src/util/unitstring.cpp \
 HEADERS += src/util/units.h \
     src/util/unitstring.h \
     src/util/cgeneral.h \
+    src/util/csvimporter.h \
     src/util/rununits.h \
     src/util/lengthunits.h \
     src/util/heightunits.h \
@@ -40,5 +42,5 @@ HEADERS += src/util/units.h \
     src/util/version.h \
     src/util/tcximporter.h \
     src/util/querywidget.h \
-    src/util/queryfilter.h
+    src/util/queryfilter.h \
 FORMS += src/util/querywidget.ui
