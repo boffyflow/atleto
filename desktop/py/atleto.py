@@ -1,6 +1,8 @@
 import pandas as pd
 import jdutil as jd
+from datetime import time
 import sqlite3
+import math
 
 class aveHR:
     def __init__(self):
@@ -17,22 +19,37 @@ class aveHR:
 def jdate(day):
 
     datet = jd.jd_to_datetime(day)
-    return datet.isoformat()
+    return datet.strftime( '%Y-%m-%d')
+
+def pace(t, dist):
+    sec = t / (dist * 0.001)
+    min = math.floor( sec / 60)
+    sec = sec - min * 60
+    if round(sec) > 59:
+        sec = 0
+        min = min + 1    
+    
+    timet = time( 0, min, round(sec))
+    return timet.strftime( '%M:%S')
 
 def main():
 
     conn = sqlite3.connect("atleto_data.atl")
     conn.create_function('jdate', 1, jdate)
+    conn.create_function('pace', 2, pace)
     conn.create_aggregate('avehr', 2, aveHR)
-    runs = pd.read_sql_query("SELECT jdate(day),SUM(dist),SUM(hr),AVEHR(hr,dist),run_id\
+
+    sqlite3.enable_callback_tracebacks(True) 
+
+    runs = pd.read_sql_query("SELECT jdate(day) AS Date,SUM(dist) AS Distance,\
+                                SUM(t) AS Time,PACE(SUM(t),SUM(dist)) AS Pace,\
+                                AVEHR(hr,dist) AS Heartrate,run_id AS id\
                                 FROM run_splits\
                                 INNER JOIN runs\
                                 ON runs.id=run_splits.run_id\
-                                GROUP BY run_splits.run_id", conn)
+                                GROUP BY run_splits.run_id\
+                                ORDER BY day ASC", conn)
     print(runs.tail())
-
-    print('testing: ' + julian2date(2458084))
-
 
 if __name__ == '__main__':
     main()    
