@@ -3,6 +3,9 @@ import jdutil as jd
 from datetime import time
 import sqlite3
 import math
+import plotly.plotly as py
+import plotly.graph_objs as go
+
 
 class aveHR:
     def __init__(self):
@@ -22,14 +25,14 @@ def jdate(day):
     return datet.strftime( '%Y-%m-%d')
 
 def pace(t, dist):
-    sec = t / (dist * 0.001)
-    min = math.floor( sec / 60)
-    sec = sec - min * 60
-    if round(sec) > 59:
-        sec = 0
-        min = min + 1    
+    secs = t / (dist * 0.001)
+    mins = math.floor( secs / 60)
+    secs = secs - mins * 60
+    if round(secs) > 59:
+        secs = 0
+        mins = mins + 1    
     
-    timet = time( 0, min, round(sec))
+    timet = time( 0, mins, round(secs))
     return timet.strftime( '%M:%S')
 
 def main():
@@ -43,13 +46,18 @@ def main():
 
     runs = pd.read_sql_query("SELECT jdate(day) AS Date,SUM(dist) AS Distance,\
                                 SUM(t) AS Time,PACE(SUM(t),SUM(dist)) AS Pace,\
-                                AVEHR(hr,dist) AS Heartrate,run_id AS id\
+                                AVEHR(hr,dist) AS Heartrate\
                                 FROM run_splits\
                                 INNER JOIN runs\
                                 ON runs.id=run_splits.run_id\
                                 GROUP BY run_splits.run_id\
                                 ORDER BY day ASC", conn)
-    print(runs.tail())
+    runs.set_index('Date',inplace=True)
+
+    runsyear = runs['2016-01-01':'2017-11-30']
+    print(runsyear[(runsyear['Distance'] >= 5000.0) &\
+            (round(runsyear['Heartrate']) <= 140) &\
+            (round(runsyear['Heartrate']) >= 135)])
 
 if __name__ == '__main__':
     main()    
