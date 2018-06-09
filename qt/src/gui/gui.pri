@@ -66,6 +66,7 @@ HEADERS += src/gui/mainwindow.h \
     src/gui/aboutatleto.h \
     src/gui/atletooptions.h \
     src/gui/runviewer.h
+
 FORMS += src/gui/mainwindow.ui \
     src/gui/athleteselector.ui \
     src/gui/editorwidget.ui \

@@ -21,6 +21,7 @@ SOURCES += src/util/unitstring.cpp \
     src/util/tcximporter.cpp \
     src/util/querywidget.cpp \
     src/util/queryfilter.cpp
+
 HEADERS += src/util/units.h \
     src/util/unitstring.h \
     src/util/cgeneral.h \
@@ -42,5 +43,6 @@ HEADERS += src/util/units.h \
     src/util/version.h \
     src/util/tcximporter.h \
     src/util/querywidget.h \
-    src/util/queryfilter.h \
+    src/util/queryfilter.h
+
 FORMS += src/util/querywidget.ui

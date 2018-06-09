@@ -21,6 +21,8 @@ namespace Ui
 class QueryWidget : public QWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY( QueryWidget)
+
 public:
 
     QueryWidget( QWidget *parent = 0);
