@@ -4,3 +4,12 @@ build-atleto-Desktop_Qt_5_9_1_MinGW_32bit-Debug/debug/atleto.exe
 *.stash
 *.obj
 *.pdb
+moc_*.cpp
+moc_*.h
+ui*.h
+atleto.exe
+atleto.ilk
+Makefile
+Makefile.Release
+Makefile.Debug
+
