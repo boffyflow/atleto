@@ -18,6 +18,7 @@
 #include "src/data/athlete.h"
 #include "src/gui/atletooptions.h"
 #include "src/util/tcximporter.h"
+#include "src/util/csvimporter.h"
 
 //testing
 #include "src/plot/ploteditor.h"
@@ -260,6 +261,20 @@ void MainWindow::on_actionImport_TCX_triggered()
     TcxImporter         tcx;
 
     tcx.run();
+
+    if( ui->mainContent->currentIndex() == 0)
+    {
+        ((CalendarWidget *) ui->mainContent->currentWidget())->updateContent();
+    }
+
+    updateStatus();
+}
+
+void MainWindow::on_actionImport_CSV_triggered()
+{
+    CsvImporter         csv;
+
+    csv.run();
 
     if( ui->mainContent->currentIndex() == 0)
     {

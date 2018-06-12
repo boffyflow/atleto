@@ -44,6 +44,7 @@ private slots:
 
     void on_actionPlotTest_triggered();
     void on_actionImport_TCX_triggered();
+    void on_actionImport_CSV_triggered();
     void on_actionOptions_triggered();
     void on_actionAbout_Atleto_triggered();
     void on_actionRaces_triggered( bool);
