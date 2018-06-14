@@ -15,8 +15,6 @@
 					<a href=\"#\">Test 3</a>
 				</div>
 			</li>
-
-
 			<li><a href=\"/php/races_report.php\">Races</a></li>
 			<li><a href=\"/php/shoe_report.php\">Shoes</a></li>
 			<li><a href=\"/php/search_results.php\">Search...</a></li>
