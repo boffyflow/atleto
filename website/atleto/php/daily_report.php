@@ -12,8 +12,10 @@
 		<title>Atleto - Daily</title>
 
 		<!-- begin CSS -->
+
 		<link href="/css/atleto.css" type="text/css" rel="stylesheet">
-	
+		<link href="/css/menu.css" type="text/css" rel="stylesheet">
+
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/atleto.js"></script>
 		<script type="text/javascript">
