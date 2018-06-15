@@ -13,7 +13,7 @@
 			<li class=\"dropdown\"><a href=\"#\">Reports</a>
 				<div class=\"dropdown-content\">
 					<a href=\"/php/day_report.php\">Day</a>
-					<a href=\"#\">Easy Pace</a>
+					<a href=\"/php/easy_pace_report.php\">Easy Pace</a>
 					<a href=\"#\">Weighted Averages</a>
 					<a href=\"#\">Future</a>
 				</div>

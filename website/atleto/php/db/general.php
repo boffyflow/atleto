@@ -83,6 +83,39 @@
 		return $row[0];
 	}
 
+	/* Average heartrate weighted by time */
+	function heartrate( $fd, $ld)
+	{
+		global $dbfilename;
+		
+		$db = new SQLite3( $dbfilename);
+
+		$firstDay = new DateTime( $fd);
+		$lastDay = new DateTime( $ld);
+		
+		$jd1 = gregoriantojd( $firstDay->format('n'), $firstDay->format('j'), $firstDay->format('Y'));
+		$jd2 = gregoriantojd( $lastDay->format('n'), $lastDay->format('j'), $lastDay->format('Y'));
+		
+		$result = $db->query( "select hr,t from run_splits where run_id in (select id from runs where day >=" . $jd1 .
+								" and day <=" . $jd2 . ")");
+								
+		$avehr = 0.0;
+		$totalt = 0;
+		if( $result->numColumns() > 0)
+		{			
+			while( $row = $result->fetchArray())
+			{
+				$avehr = $avehr + ( $row['hr'] * $row['t']);
+				$totalt = $totalt + $row['t'];
+			}
+			if( $totalt > 0)
+				$avehr = $avehr / $totalt;
+		}
+		$db->close();
+
+		return $avehr;
+	}
+
 	function weight( $fd, $ld, $property)
 	{
 		global $dbfilename;
