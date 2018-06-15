@@ -15,6 +15,7 @@
 					<a href=\"/php/day_report.php\">Day</a>
 					<a href=\"#\">Easy Pace</a>
 					<a href=\"#\">Weighted Averages</a>
+					<a href=\"#\">Future</a>
 				</div>
 			</li>
 			<li><a href=\"/php/races_report.php\">Races</a></li>
