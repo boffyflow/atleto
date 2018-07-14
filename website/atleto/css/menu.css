@@ -47,8 +47,19 @@ div.centre {
   text-align: left;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
 
 .dropdown:hover .dropdown-content {
+  font: 16px;
   display: block;
+}
+
+/*.dropdown a {
+  font-size: 10px;
+}
+*/
+.dropdown-content a {
+  font-size: 16px;
 }
