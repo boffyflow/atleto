@@ -223,7 +223,7 @@
 		{		
             $distance = total( $counter->format('Y-M-d'), $counter->format('Y-M-d'), "dist") * 0.001;
             $avehr = heartrate( $counter->format('Y-M-d'), $counter->format('Y-M-d'));
-            if( $distance < 0.01 || $avehr < 135 || $avehr > 140)
+            if( $distance < 0.01 || $avehr < 130 || $avehr > 140)
             {
                 $pace = NULL;
 			}
