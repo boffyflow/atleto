@@ -15,3 +15,5 @@ Makefile
 Makefile.Release
 Makefile.Debug
 
+python/.ipynb_checkpoints/atleto-checkpoint.ipynb
+*.pyc

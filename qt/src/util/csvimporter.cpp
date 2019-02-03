@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QDomDocument>
 #include <QtDebug>
+#include <QDebug>
+
 
 CsvImporter::CsvImporter()
 {
@@ -76,4 +78,6 @@ void CsvImporter::loadDeviceData( Run *run, QFileInfo& fi)
 
         return;
     }
+
+    qDebug() << "opening CSV file";
 }
