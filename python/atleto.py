@@ -77,15 +77,7 @@ def plotEasyPace(df):
     # Scatter plot
     x = dates.date2num( df['Date'])
     y = dates.date2num( df['Pace'])
-    
-    print(y)
-        
-    t1 = np.amin(df['Pace'])
-    print(type(t1))
-    
-    print(np.amin(df['Pace']))
-    print(np.amax(df['Pace']))
-    
+                 
     plt.ylabel('Pace')
     plt.scatter(x, y, s=20)
 
@@ -93,12 +85,12 @@ def plotEasyPace(df):
     ax.xaxis.set_major_formatter( dates.DateFormatter('%Y-%m-%d'))
     ax.format_xdata = dates.DateFormatter('%Y-%m-%d')
     ax.yaxis.set_major_formatter( dates.DateFormatter('%M:%S'))
-    ax.format_ydata = dates.DateFormatter('%M:%S')
-    
-    tdelta = dates.date2num( dt.datetime(0,0,0,0,0,10))
-    print('td:',tdelta)
-    tdelta = 0
-    ax.set_ylim( np.amin(y) - tdelta, np.amax(y) + tdelta)
+    ax.format_ydata = dates.DateFormatter('%M:%S')   
+
+    # set limits for pace axis
+    bottom = dates.date2num( df['Pace'].min() - pd.Timedelta(seconds=5))
+    top = dates.date2num( df['Pace'].max() + pd.Timedelta(seconds=5))
+    ax.set_ylim( bottom, top)
     
     # trendline
     z = np.polyfit(x, y, 1)
