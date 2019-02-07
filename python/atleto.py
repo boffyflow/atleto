@@ -78,7 +78,7 @@ def plotEasyPace(df):
     x = dates.date2num( df['Date'])
     y = dates.date2num( df['Pace'])
                  
-    plt.ylabel('Pace')
+    plt.ylabel('Pace (min/km)')
     plt.scatter(x, y, s=20)
 
     # set axis ticks and labels
