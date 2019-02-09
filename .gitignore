@@ -17,3 +17,4 @@ Makefile.Debug
 
 python/.ipynb_checkpoints/atleto-checkpoint.ipynb
 *.pyc
+python/.ipynb_checkpoints/test-checkpoint.ipynb
