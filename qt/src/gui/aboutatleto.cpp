@@ -12,8 +12,7 @@ AboutAtleto::AboutAtleto(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    QString     version = "Atleto v" + ATLETO_MAJ + "." + ATLETO_MIN + "." + ATLETO_MIN_REV;
-    QString     version = "TRUNK";
+    QString     version = "Atleto v" + ATLETO_MAJ + "." + ATLETO_MIN + "." + ATLETO_MIN_REV + "." + BUILD;
     ui->aboutLabel->setText( version);
 }
 
