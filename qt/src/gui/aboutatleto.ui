@@ -63,7 +63,7 @@
       <bool>true</bool>
      </property>
      <property name="plainText">
-      <string>(c) 2010 Parallel Pixels Ltd. All rights reserved.
+      <string>(c) 2010-2019 Robert Uebbing. All rights reserved.
 
 Licensed under Gnu Public License v3
 http://www.gnu.org/licenses/gpl-3.0.html</string>

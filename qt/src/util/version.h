@@ -6,9 +6,9 @@
 
 #include <QString>
 
-const QString       ATLETO_MAJ = "1";
+const QString       ATLETO_MAJ = "0";
 const QString       ATLETO_MIN = "0";
 const QString       ATLETO_MIN_REV = "0";
-const QString       BUILD = "0";
+const QString       BUILD = "master";
 
 #endif // VERSION_H

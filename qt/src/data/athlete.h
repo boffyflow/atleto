@@ -26,7 +26,7 @@ public:
     void setGender(bool val) { mGender = val; }
 
 private:
-    static Athlete* instance;
+    static Athlete* mInstance;
     Athlete();
 
     int mId;

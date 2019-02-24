@@ -1,18 +1,19 @@
 #include "athlete.h"
 #include <QtSql>
 
-Athlete* Athlete::instance = NULL;
+Athlete* Athlete::mInstance = NULL;
 
 Athlete::Athlete()
 {
-    // mName = QString();
-    mHeight = 1.85;
+    mHeight = 1.80;
 }
 
 Athlete* Athlete::getInstance()
 {
-    if( !instance ) instance = new Athlete();
-    return instance;
+    if( !mInstance)
+        mInstance = new Athlete();
+
+    return mInstance;
 }
 
 void Athlete::newAthlete()
@@ -26,10 +27,9 @@ void Athlete::newAthlete()
 
 void Athlete::setAthleteById(int id)
 {
-    QSqlQuery q( "SELECT name,dob,height,male "
-                 "FROM athletes "
-                 "WHERE id=:id");
+    QSqlQuery q;
 
+    q.prepare( "SELECT name,dob,height,male FROM athletes WHERE id=1");
     q.bindValue(":id", id );
     q.exec();
 
@@ -50,10 +50,9 @@ void Athlete::setAthleteById(int id)
 
 void Athlete::setAthleteByName(QString name)
 {
-    QSqlQuery q( "SELECT id,name,dob,height,male "
-                 "FROM athletes "
-                 "WHERE name=:name");
+    QSqlQuery q;
 
+    q.prepare( "SELECT id,name,dob,height,male FROM athletes WHERE name=:name");
     q.bindValue(":name", name);
     q.exec();
 
