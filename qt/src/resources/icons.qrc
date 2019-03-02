@@ -27,5 +27,6 @@
         <file>find.png</file>
         <file>journal.png</file>
         <file>trophy.xpm</file>
+        <file>publish.png</file>
     </qresource>
 </RCC>
