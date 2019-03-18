@@ -116,7 +116,7 @@ def date_to_jd(year,month,day):
     return jd
     
     
-def jd_to_date(jd):
+def jd_to_date(jd,format='ymd'):
     """
     Convert Julian Day to date.
     
@@ -127,6 +127,10 @@ def jd_to_date(jd):
     ----------
     jd : float
         Julian Day
+
+    format : string
+        Format of the return. Default is 'ymd' which returns the data as year, month, day
+        Any other format must be recognizable by datetime.strftime()
         
     Returns
     -------
@@ -140,12 +144,20 @@ def jd_to_date(jd):
     day : float
         Day, may contain fractional part.
         
+    
+    Or when using format argument the function will return a datestring:
+    
+    datestring : string
+        date string based on "format" based on string parameter
+
     Examples
     --------
     Convert Julian Day 2446113.75 to year, month, and day.
     
     >>> jd_to_date(2446113.75)
     (1985, 2, 17.25)
+    >>> jd_to_date(2446113.75, '%Y-%m-%d)
+    1985-02-17
     
     """
     jd = jd + 0.5
@@ -179,8 +191,11 @@ def jd_to_date(jd):
         year = D - 4716
     else:
         year = D - 4715
-        
-    return year, month, day
+    
+    if format=='ymd':
+        return year, month, day
+    else:
+        return jd_to_datetime( jd).strftime( format)
     
     
 def hmsm_to_days(hour=0,min=0,sec=0,micro=0):
@@ -295,8 +310,8 @@ def datetime_to_jd(date):
     days = date.day + hmsm_to_days(date.hour,date.minute,date.second,date.microsecond)
     
     return date_to_jd(date.year,date.month,days)
-    
-    
+
+
 def jd_to_datetime(jd):
     """
     Convert a Julian Day to an `jdutil.datetime` object.
