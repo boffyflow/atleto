@@ -9,15 +9,15 @@ import matplotlib.dates as dates
 
 class aveHR:
     def __init__(self):
-        self.tdist = 0
+        self.t = 0
         self.hr = 0
 
-    def step(self, hr, dist):
-        self.hr += hr * dist
-        self.tdist += dist
+    def step(self, hr, t):
+        self.hr += hr * t
+        self.t += t
 
     def finalize(self):
-        return self.hr / self.tdist
+        return self.hr / self.t
 
 def jdate(day):
     datet = jd.jd_to_datetime(day)
@@ -37,7 +37,34 @@ def pace(t, dist):
 class atleto:
     def __init__(self, fname):
         self.filename = fname
+    
+    def days( self, sdate, edate):
+
+        sjulian = jd.datetime_to_jd( sdate)
+        ejulian = jd.datetime_to_jd( edate)
         
+        conn = sqlite3.connect( self.filename)
+
+        querystring = 'SELECT day,weight AS Weight FROM Physicals WHERE day<=%s AND day >=%s' % (ejulian,sjulian)
+        print( self.filename)
+        print( querystring)
+
+        df = pd.read_sql_query( querystring, conn)
+        df['Date'] = 'YYYY-MM-DD'
+#        df.Date = df.day
+        df.Date =  jd.jd_to_datetime(df.day).strftime( '%Y-%m-%d')
+
+        return df
+
+    def weeks():
+        return
+    
+    def months():
+        return
+
+    def years():
+        return
+
     def runs(self):
         conn = sqlite3.connect( self.filename)
 
@@ -49,7 +76,7 @@ class atleto:
 
         df = pd.read_sql_query("SELECT jdate(day) AS Date,SUM(dist) AS Distance,\
                                         SUM(t) AS Time,PACE(SUM(t),SUM(dist)) AS Pace,\
-                                        AVEHR(hr,dist) AS Heartrate\
+                                        AVEHR(hr,t) AS Heartrate\
                                         FROM run_splits\
                                         INNER JOIN runs\
                                         ON runs.id=run_splits.run_id\
@@ -58,6 +85,7 @@ class atleto:
         
         df['Date'] = pd.to_datetime( df['Date'])
         df['Pace'] = pd.to_datetime( df['Pace'], format='%M:%S')
+        df = df.round({'Heartrate':0})
         
         return df
     
