@@ -23,7 +23,6 @@ def main():
 
     days = a.days( dt.datetime.strptime( args.startdate, '%Y-%m-%d'), dt.datetime.strptime( args.enddate, '%Y-%m-%d'))
 
-    print( 'from: ', args.startdate, 'to: ', args.enddate)
     print( days)
 
 

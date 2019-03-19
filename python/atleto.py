@@ -45,14 +45,19 @@ class atleto:
         
         conn = sqlite3.connect( self.filename)
 
-        querystring = 'SELECT day,weight AS Weight FROM Physicals WHERE day<=%s AND day >=%s' % (ejulian,sjulian)
-        print( self.filename)
-        print( querystring)
+        querystring = 'SELECT day,weight AS Weight, bodyfat AS Bodyfat FROM Physicals WHERE day<=%s AND day >=%s' % (ejulian,sjulian)
 
         df = pd.read_sql_query( querystring, conn)
-        df['Date'] = 'YYYY-MM-DD'
-#        df.Date = df.day
-        df.Date =  jd.jd_to_datetime(df.day).strftime( '%Y-%m-%d')
+
+        for index, row in df.iterrows():
+            df.at[index, 'Date'] = jdate( df.at[index,'day'])
+        df = df.drop( columns=['day'])
+        df = df.set_index( 'Date')
+        df['Weight'] = df['Weight'] * 0.001
+        df['Bodyfat'] = df['Bodyfat'] * 0.1
+
+        print( 'from julian date - from:', sjulian, 'to:', ejulian)
+        print( 'from calendar date - from:',jd.jd_to_date( sjulian, '%Y-%m-%d'), 'to:', jd.jd_to_date( ejulian, '%Y-%m-%d'))
 
         return df
 
