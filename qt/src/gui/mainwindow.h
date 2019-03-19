@@ -56,6 +56,7 @@ private slots:
     void on_actionReport_Generator_triggered( bool);
     void on_actionQuit_triggered();
     void on_actionAbout_Qt_triggered();
+    void on_actionPublish_triggered();
 };
 
 #endif // MAINWINDOW_H

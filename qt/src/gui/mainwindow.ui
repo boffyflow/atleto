@@ -108,6 +108,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionRun_Calculator"/>
+    <addaction name="actionPublish"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -128,6 +129,8 @@
    <addaction name="actionReport_Generator"/>
    <addaction name="actionSearch_Run"/>
    <addaction name="actionRaces"/>
+   <addaction name="separator"/>
+   <addaction name="actionPublish"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAbout_Qt">
@@ -198,7 +201,7 @@
     <string>Run Calculator</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+X</string>
    </property>
   </action>
   <action name="actionShoes">
@@ -265,6 +268,21 @@
   <action name="actionImport_CSV">
    <property name="text">
     <string>Import CSV...</string>
+   </property>
+  </action>
+  <action name="actionPublish">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/icons.qrc">
+     <normaloff>:/main/icons/publish.png</normaloff>:/main/icons/publish.png</iconset>
+   </property>
+   <property name="text">
+    <string>Publish to website</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

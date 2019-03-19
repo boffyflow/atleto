@@ -234,6 +234,8 @@ void MainWindow::on_actionAbout_Atleto_triggered()
     about.exec();
 }
 
+
+
 void MainWindow::on_actionOptions_triggered()
 {
     AtletoOptions       ao( this);
@@ -290,3 +292,9 @@ void MainWindow::on_actionPlotTest_triggered()
 
     pe.exec();
 }
+
+void MainWindow::on_actionPublish_triggered()
+{
+    qDebug() << mDBName;
+}
+
