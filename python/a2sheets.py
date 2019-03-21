@@ -22,8 +22,13 @@ def main():
         args.enddate = dt.datetime.today().strftime('%Y-%m-%d')
 
     days = a.days( dt.datetime.strptime( args.startdate, '%Y-%m-%d'), dt.datetime.strptime( args.enddate, '%Y-%m-%d'))
+    weeks = a.weeks( dt.datetime.strptime( args.startdate, '%Y-%m-%d'), dt.datetime.strptime( args.enddate, '%Y-%m-%d'))
+    months = a.months( dt.datetime.strptime( args.startdate, '%Y-%m-%d'), dt.datetime.strptime( args.enddate, '%Y-%m-%d'))
+    years = a.years( dt.datetime.strptime( args.startdate, '%Y-%m-%d'), dt.datetime.strptime( args.enddate, '%Y-%m-%d'))
 
-    print( days)
+    print( weeks)
+    print( months)
+    print( years)
 
 
 if __name__ == "__main__":

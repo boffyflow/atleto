@@ -6,31 +6,38 @@ import sqlite3
 import math
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
+
 class aveHR:
-    def __init__(self):
+    def __init__( self):
         self.t = 0
         self.hr = 0
 
-    def step(self, hr, t):
+    def step( self, hr, t):
         self.hr += hr * t
         self.t += t
 
     def finalize(self):
         return self.hr / self.t
 
-def jdate(day):
+
+def jdate( day):
     datet = jd.jd_to_datetime(day)
     return datet.strftime( '%Y-%m-%d')
 
-def pace(t, dist):
-    secs = t / (dist * 0.001)
-    mins = math.floor( secs / 60)
+
+def pace( t, dist):
+    
+    if math.isnan( t) or math.isnan( dist):
+        return "0"
+
+    secs = t / dist
+    mins = int( math.floor( secs / 60))
     secs = secs - mins * 60
     if round(secs) > 59:
         secs = 0
         mins = mins + 1    
-    
-    timet = dt.time( 0, mins, round(secs))
+
+    timet = dt.time( 0, mins, int( round(secs)))
     return timet.strftime( '%M:%S')
 
 class atleto:
@@ -73,7 +80,7 @@ class atleto:
         sqlite3.enable_callback_tracebacks(True) 
 
         querystring = 'SELECT jdate(day) AS Date,SUM(dist) AS Distance,\
-                                        SUM(t) AS Time,PACE(SUM(t),SUM(dist)) AS Pace,\
+                                        SUM(t) AS Time,\
                                         AVEHR(hr,t) AS Heartrate\
                                         FROM run_splits\
                                         INNER JOIN runs\
@@ -85,7 +92,9 @@ class atleto:
         df = pd.read_sql_query( querystring, conn)
         
         df['Date'] = pd.to_datetime( df['Date'])
-        df['Pace'] = pd.to_datetime( df['Pace'], format='%M:%S')
+        df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)
+        df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        
         df = df.round({'Heartrate':0})
 
         return df
@@ -100,14 +109,55 @@ class atleto:
 
         return df
 
-    def weeks():
-        return
-    
-    def months():
-        return
+    def weeks( self, sdate, edate):
 
-    def years():
-        return
+        days = self.days( sdate, edate)
+
+        weeks = pd.DataFrame()
+
+        weeks['Weight'] = days.Weight.resample('W').mean()
+        weeks['MinWeight'] = days.Weight.resample('W').min()
+        weeks['MaxWeight'] = days.Weight.resample('W').max()
+        weeks['Bodyfat'] = days.Bodyfat.resample('W').mean()
+        weeks['Distance'] = days.Distance.resample('W').sum()
+        weeks['Time'] = days.Time.resample('W').sum()
+        weeks['Heartrate'] = days.Heartrate.resample('W').mean()
+        weeks['Pace'] = weeks.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        weeks = weeks.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
+
+        return weeks
+    
+    def months( self, sdate, edate):
+
+        days = self.days( sdate, edate)
+
+        months = pd.DataFrame()
+
+        months['Weight'] = days.Weight.resample('M').mean()
+        months['Bodyfat'] = days.Bodyfat.resample('M').mean()
+        months['Distance'] = days.Distance.resample('M').sum()
+        months['Time'] = days.Time.resample('M').sum()
+        months['Heartrate'] = days.Heartrate.resample('M').mean()
+        months['Pace'] = months.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        months = months.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
+
+        return months
+
+    def years( self, sdate, edate):
+
+        days = self.days( sdate, edate)
+
+        years = pd.DataFrame()
+
+        years['Weight'] = days.Weight.resample('A').mean()
+        years['Bodyfat'] = days.Bodyfat.resample('A').mean()
+        years['Distance'] = days.Distance.resample('A').sum()
+        years['Time'] = days.Time.resample('A').sum()
+        years['Heartrate'] = days.Heartrate.resample('A').mean()
+        years['Pace'] = years.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        years = years.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
+
+        return years
 
 
 def plotEasyPace( df):
