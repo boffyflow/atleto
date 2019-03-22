@@ -41,10 +41,14 @@ def pace( t, dist):
     return timet.strftime( '%M:%S')
 
 class atleto:
-    def __init__(self, fname):
+    def __init__(self, fname, sdate, edate):
+
         self.filename = fname
+        self.days = self.days( sdate, edate)
+
     
     def physicals( self, sdate, edate):
+
         sjulian = jd.datetime_to_jd( sdate)
         ejulian = jd.datetime_to_jd( edate)
         
@@ -62,8 +66,7 @@ class atleto:
         df['Weight'] = df['Weight'] * 0.001
         df['Bodyfat'] = df['Bodyfat'] * 0.1
 
-        print( 'from julian date - from:', sjulian, 'to:', ejulian)
-        print( 'from calendar date - from:',jd.jd_to_date( sjulian, '%Y-%m-%d'), 'to:', jd.jd_to_date( ejulian, '%Y-%m-%d'))
+        df = df.round( {'Weight':1, 'Bodyfat':1})
 
         return df
 
@@ -94,70 +97,49 @@ class atleto:
         df['Date'] = pd.to_datetime( df['Date'])
         df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)
         df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        df.loc[:,'Heartrate'].replace( 0.0, np.nan, inplace=True)
         
-        df = df.round({'Heartrate':0})
+        df = df.round( {'Distance':1, 'Time':0, 'Heartrate':0})
 
         return df
+
 
     def days( self, sdate, edate):
         
         phys = self.physicals( sdate, edate)
         runs = self.runs( sdate, edate)
 
-        df = pd.merge_ordered( phys, runs, on='Date', how='left')
+        groupedruns = runs.groupby('Date').agg( {'Distance':'sum','Time':'sum','Heartrate':'mean'}).reset_index()
+        groupedruns['Pace'] = groupedruns.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+
+        df = pd.merge_ordered( phys, groupedruns, on='Date')
         df = df.set_index( 'Date')
 
         return df
 
-    def weeks( self, sdate, edate):
+    def aggregate( self, agg='days'):
 
-        days = self.days( sdate, edate)
+        days = self.days
 
-        weeks = pd.DataFrame()
+        if agg == 'days':
+            return days
 
-        weeks['Weight'] = days.Weight.resample('W').mean()
-        weeks['MinWeight'] = days.Weight.resample('W').min()
-        weeks['MaxWeight'] = days.Weight.resample('W').max()
-        weeks['Bodyfat'] = days.Bodyfat.resample('W').mean()
-        weeks['Distance'] = days.Distance.resample('W').sum()
-        weeks['Time'] = days.Time.resample('W').sum()
-        weeks['Heartrate'] = days.Heartrate.resample('W').mean()
-        weeks['Pace'] = weeks.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
-        weeks = weeks.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
+        df = pd.DataFrame()
 
-        return weeks
-    
-    def months( self, sdate, edate):
+        df['Weight'] = days.Weight.resample( agg).mean()
+        df['MinWeight'] = days.Weight.resample( agg).min()
+        df['MaxWeight'] = days.Weight.resample( agg).max()
+        df['Bodyfat'] = days.Bodyfat.resample( agg).mean()
+        df['Distance'] = days.Distance.resample( agg).sum()
+        df['Time'] = days.Time.resample( agg).sum()
+        df['Heartrate'] = days.Heartrate.resample( agg).mean()
+        df['MinHeartrate'] = days.Heartrate.resample( agg).min()
+        df['MaxHeartrate'] = days.Heartrate.resample( agg).max()
+        df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        df = df.round( {'Weight':1,'MinWeight':1,'MaxWeight':1, 'Bodyfat':1,
+                        'Distance':1, 'Time':0, 'Heartrate':0,'MinHeartrate':0,'MaxHeartrate':1})
 
-        days = self.days( sdate, edate)
-
-        months = pd.DataFrame()
-
-        months['Weight'] = days.Weight.resample('M').mean()
-        months['Bodyfat'] = days.Bodyfat.resample('M').mean()
-        months['Distance'] = days.Distance.resample('M').sum()
-        months['Time'] = days.Time.resample('M').sum()
-        months['Heartrate'] = days.Heartrate.resample('M').mean()
-        months['Pace'] = months.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
-        months = months.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
-
-        return months
-
-    def years( self, sdate, edate):
-
-        days = self.days( sdate, edate)
-
-        years = pd.DataFrame()
-
-        years['Weight'] = days.Weight.resample('A').mean()
-        years['Bodyfat'] = days.Bodyfat.resample('A').mean()
-        years['Distance'] = days.Distance.resample('A').sum()
-        years['Time'] = days.Time.resample('A').sum()
-        years['Heartrate'] = days.Heartrate.resample('A').mean()
-        years['Pace'] = years.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
-        years = years.round( {'Weight':1, 'Bodyfat':1, 'Distance':1, 'Time':0, 'Heartrate':0})
-
-        return years
+        return df      
 
 
 def plotEasyPace( df):
