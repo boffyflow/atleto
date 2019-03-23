@@ -40,7 +40,6 @@ def main():
 
     print( 'Writing Days...')
     days = a.aggregate()
-    print( days)
     write2sheet( days, 'Days')
 
     print( 'Writing Weeks...')
