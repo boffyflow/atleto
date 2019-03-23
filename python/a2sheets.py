@@ -38,24 +38,28 @@ def main():
 
     a = atl.atleto( args.input, sd, ed)
 
+    print( 'Writing Days...')
     days = a.aggregate()
+    print( days)
+    write2sheet( days, 'Days')
+
+    print( 'Writing Weeks...')
     weeks = a.aggregate( 'W')
+    write2sheet( weeks, 'Weeks')
+
+    print( 'Writing Months...')
     months = a.aggregate( 'M')
+    write2sheet( months, 'Months')
+
+    print( 'Writing Years...')
     years = a.aggregate( 'A')
+    write2sheet( years, 'Years')
 
+    print( 'Writing Runs...')
     df = a.runs( sd, ed)
-    print( df)
-
-   # print( days)
-
-   # write2sheet( days, 'Days')
-   # print( weeks)
-   # write2sheet( weeks, 'Weeks')
-   # print( months)
-   # write2sheet( months, 'Months')
-   # print( years)
-   # write2sheet( years, 'Years')
-
+    write2sheet( df, 'Runs')
+    
+    print( '...cmpleted')
 
 if __name__ == "__main__":
     main()

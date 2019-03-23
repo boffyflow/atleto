@@ -80,7 +80,7 @@ class atleto:
 
         sqlite3.enable_callback_tracebacks(True) 
 
-        querystring = 'SELECT runs.id as RunID,\
+        querystring = 'SELECT runs.id as RunID,runs.starttime as StartTime,\
                         locations.name as Location,\
                         run_types.name AS RunType,surfaces.name AS Surface,\
                         shoes.name AS Shoe,shoes.brand AS Brand\
@@ -101,10 +101,8 @@ class atleto:
         druns = self.druns( sdate, edate)
 
         runs = pd.merge_ordered( druns, df, on='RunID')
-        runs = runs.drop( columns=['RunID', 'TxHR'])
-        runs = runs.set_index( 'Date')
-
-        print( runs)        
+        runs = runs.drop( columns=['TxHR'])
+        runs = runs.set_index( 'RunID')
 
         return runs
 
