@@ -43,15 +43,18 @@ def main():
     months = a.aggregate( 'M')
     years = a.aggregate( 'A')
 
-    print( days)
+    df = a.runs( sd, ed)
+    print( df)
 
-    write2sheet( days, 'Days')
+   # print( days)
+
+   # write2sheet( days, 'Days')
    # print( weeks)
-    write2sheet( weeks, 'Weeks')
+   # write2sheet( weeks, 'Weeks')
    # print( months)
-    write2sheet( months, 'Months')
+   # write2sheet( months, 'Months')
    # print( years)
-    write2sheet( years, 'Years')
+   # write2sheet( years, 'Years')
 
 
 if __name__ == "__main__":

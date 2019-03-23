@@ -6,7 +6,6 @@ import sqlite3
 import math
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
-
 class aveHR:
     def __init__( self):
         self.t = 0
@@ -46,7 +45,6 @@ class atleto:
         self.filename = fname
         self.days = self.days( sdate, edate)
 
-    
     def physicals( self, sdate, edate):
 
         sjulian = jd.datetime_to_jd( sdate)
@@ -71,18 +69,58 @@ class atleto:
         return df
 
     def runs( self, sdate, edate):
+
         sjulian = jd.datetime_to_jd( sdate)
         ejulian = jd.datetime_to_jd( edate)
 
         conn = sqlite3.connect( self.filename)
 
         conn.create_function('jdate', 1, jdate)
-        conn.create_function('pace', 2, pace)
         conn.create_aggregate('avehr', 2, aveHR)
 
         sqlite3.enable_callback_tracebacks(True) 
 
-        querystring = 'SELECT jdate(day) AS Date,SUM(dist) AS Distance,\
+        querystring = 'SELECT runs.id as RunID,\
+                        locations.name as Location,\
+                        run_types.name AS RunType,surfaces.name AS Surface,\
+                        shoes.name AS Shoe,shoes.brand AS Brand\
+                        FROM runs\
+                        INNER JOIN locations\
+                            ON locations.id=runs.location_id\
+                        INNER JOIN run_types\
+                            ON run_types.id=runs.runtype_id\
+                        INNER JOIN surfaces\
+                            ON surfaces.id=runs.surface_id\
+                        INNER JOIN shoes\
+                            ON shoes.id=runs.shoe_id\
+                        WHERE day<=%s AND day>=%s\
+                        ORDER BY day ASC' % (ejulian, sjulian)
+
+        df = pd.read_sql_query( querystring, conn)
+
+        druns = self.druns( sdate, edate)
+
+        runs = pd.merge_ordered( druns, df, on='RunID')
+        runs = runs.drop( columns=['RunID', 'TxHR'])
+        runs = runs.set_index( 'Date')
+
+        print( runs)        
+
+        return runs
+
+    def druns( self, sdate, edate):
+
+        sjulian = jd.datetime_to_jd( sdate)
+        ejulian = jd.datetime_to_jd( edate)
+
+        conn = sqlite3.connect( self.filename)
+
+        conn.create_function('jdate', 1, jdate)
+        conn.create_aggregate('avehr', 2, aveHR)
+
+        sqlite3.enable_callback_tracebacks(True) 
+
+        querystring = 'SELECT runs.id AS RunID,jdate(day) AS Date,SUM(dist) AS Distance,\
                                         SUM(t) AS Time,\
                                         AVEHR(hr,t) AS Heartrate\
                                         FROM run_splits\
@@ -97,6 +135,7 @@ class atleto:
         df['Date'] = pd.to_datetime( df['Date'])
         df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)
         df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        df['TxHR'] = df.apply( lambda row: row.Time * row.Heartrate, axis = 1)
         df.loc[:,'Heartrate'].replace( 0.0, np.nan, inplace=True)
         
         df = df.round( {'Distance':1, 'Time':0, 'Heartrate':0})
@@ -107,10 +146,13 @@ class atleto:
     def days( self, sdate, edate):
         
         phys = self.physicals( sdate, edate)
-        runs = self.runs( sdate, edate)
+        runs = self.druns( sdate, edate)
 
-        groupedruns = runs.groupby('Date').agg( {'Distance':'sum','Time':'sum','Heartrate':'mean'}).reset_index()
+        groupedruns = runs.groupby('Date').agg( {'Distance':'sum','Time':'sum','TxHR':'sum'}).reset_index()
         groupedruns['Pace'] = groupedruns.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        groupedruns['Heartrate'] = groupedruns.apply( lambda row: row.TxHR / row.Time, axis = 1)
+        groupedruns = groupedruns.round( { 'Heartrate':0})
+        groupedruns = groupedruns.drop( columns=['TxHR'])
 
         df = pd.merge_ordered( phys, groupedruns, on='Date')
         df = df.set_index( 'Date')
