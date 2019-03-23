@@ -6,6 +6,7 @@ import sqlite3
 import math
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
+
 class aveHR:
     def __init__( self):
         self.t = 0

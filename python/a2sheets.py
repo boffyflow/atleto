@@ -24,7 +24,7 @@ def write2sheet( df, worksheet):
     gc = gspread.authorize(credentials)
     spreadsheet_key = '1p9s_2skvkIx1xJ0Ui7AbVW_aUMkb7ThLRehj1fyC-yg'
 
-    d2g.upload( df, spreadsheet_key, worksheet, credentials=credentials, col_names=True, row_names=True)
+    d2g.upload( df, spreadsheet_key, worksheet, start_cell='A2', credentials=credentials, clean=False, col_names=False, row_names=True)
 
 
 def main():
