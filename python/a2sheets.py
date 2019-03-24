@@ -12,7 +12,7 @@ def parse_args():
 
     parser.add_argument('-i','--input',default='../website/atleto/data/atleto_data.atl',required=False,help='Name of the text file containing the 3D points in XYZ (required)')
     parser.add_argument('-s','--startdate',default='1900-01-01',required=False,help='Start date formatted as YYYY-MM-DD (default is 1900-01-01')
-    parser.add_argument('-e','--enddate',default='today',required=False,help='End date formatted as YYYY-MM-DD (default is today')
+    parser.add_argument('-e','--enddate',default='2100-01-01',required=False,help='End date formatted as YYYY-MM-DD (default is 2100-01-01')
 
     return parser.parse_args()
 
@@ -24,14 +24,12 @@ def write2sheet( df, worksheet):
     gc = gspread.authorize(credentials)
     spreadsheet_key = '1p9s_2skvkIx1xJ0Ui7AbVW_aUMkb7ThLRehj1fyC-yg'
 
-    d2g.upload( df, spreadsheet_key, worksheet, start_cell='A2', credentials=credentials, clean=False, col_names=False, row_names=True)
+    d2g.upload( df, spreadsheet_key, worksheet, start_cell='A2', credentials=credentials,
+        clean=False, col_names=False, row_names=True) #, df_size=True)
 
 
 def main():
     args = parse_args()
-
-    if args.enddate == 'today':
-        args.enddate = dt.datetime.today().strftime('%Y-%m-%d')
 
     sd = dt.datetime.strptime( args.startdate, '%Y-%m-%d')
     ed = dt.datetime.strptime( args.enddate, '%Y-%m-%d')
@@ -57,7 +55,7 @@ def main():
     print( 'Writing Runs...')
     df = a.runs( sd, ed)
     write2sheet( df, 'Runs')
-    
+
     print( '...cmpleted')
 
 if __name__ == "__main__":

@@ -135,8 +135,11 @@ class atleto:
         df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)
         df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
         df['TxHR'] = df.apply( lambda row: row.Time * row.Heartrate, axis = 1)
-        df.loc[:,'Heartrate'].replace( 0.0, np.nan, inplace=True)
+        df['Heartrate'] = df['Heartrate'].replace( 0.0, np.nan)
+        df['TxHR'] = df['TxHR'].replace( 0.0, np.nan)
         
+#        print( df)
+
         df = df.round( {'Distance':1, 'Time':0, 'Heartrate':0})
 
         return df
