@@ -11,8 +11,10 @@ ed = dt.datetime.strptime( config['Default']['enddate'], '%Y-%m-%d')
 
 a = atl.atleto( config['Default']['file'], sd, ed)
 
-#days = a.aggregate( config['Default']['aggregate'])
-#print( days)
+df = a.aggregate( config['Default']['aggregate'])
+#print( df)
+
+atl.plotDistPace( df)
 
 runs = a.runs()
 
