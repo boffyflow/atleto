@@ -13,10 +13,14 @@ class aveHR:
         self.hr = 0
 
     def step( self, hr, t):
-        self.hr += hr * t
-        self.t += t
+        if hr > 0 and t > 0:
+            self.hr += hr * t
+            self.t += t
 
     def finalize(self):
+        if self.t == 0 or self.hr == 0:
+            return np.nan
+        
         return self.hr / self.t
 
 
@@ -27,8 +31,8 @@ def jdate( day):
 
 def pace( t, dist):
     
-    if math.isnan( t) or math.isnan( dist):
-        return "0"
+    if math.isnan( t) or math.isnan( dist) or t == 0 or dist == 0:
+        return np.nan
 
     secs = t / dist
     mins = int( math.floor( secs / 60))
@@ -44,12 +48,14 @@ class atleto:
     def __init__(self, fname, sdate, edate):
 
         self.filename = fname
-        self.days = self.days( sdate, edate)
+        self.sdate = sdate
+        self.edate = edate
+        self.days = self.days()
 
-    def physicals( self, sdate, edate):
+    def physicals( self):
 
-        sjulian = jd.datetime_to_jd( sdate)
-        ejulian = jd.datetime_to_jd( edate)
+        sjulian = jd.datetime_to_jd( self.sdate)
+        ejulian = jd.datetime_to_jd( self.edate)
         
         conn = sqlite3.connect( self.filename)
 
@@ -64,15 +70,16 @@ class atleto:
         df['Date'] = pd.to_datetime( df['Date'])
         df['Weight'] = df['Weight'] * 0.001
         df['Bodyfat'] = df['Bodyfat'] * 0.1
+        df[['Weight','Bodyfat']] = df[['Weight','Bodyfat']].replace( 0.0, np.nan)
 
         df = df.round( {'Weight':1, 'Bodyfat':1})
 
         return df
 
-    def runs( self, sdate, edate):
+    def runs( self):
 
-        sjulian = jd.datetime_to_jd( sdate)
-        ejulian = jd.datetime_to_jd( edate)
+        sjulian = jd.datetime_to_jd( self.sdate)
+        ejulian = jd.datetime_to_jd( self.edate)
 
         conn = sqlite3.connect( self.filename)
 
@@ -99,7 +106,7 @@ class atleto:
 
         df = pd.read_sql_query( querystring, conn)
 
-        druns = self.druns( sdate, edate)
+        druns = self.druns()
 
         runs = pd.merge_ordered( druns, df, on='RunID')
         runs = runs.drop( columns=['TxHR'])
@@ -107,10 +114,10 @@ class atleto:
 
         return runs
 
-    def druns( self, sdate, edate):
+    def druns( self):
 
-        sjulian = jd.datetime_to_jd( sdate)
-        ejulian = jd.datetime_to_jd( edate)
+        sjulian = jd.datetime_to_jd( self.sdate)
+        ejulian = jd.datetime_to_jd( self.edate)
 
         conn = sqlite3.connect( self.filename)
 
@@ -130,29 +137,28 @@ class atleto:
                                         ORDER BY day ASC' % (ejulian,sjulian)
 
         df = pd.read_sql_query( querystring, conn)
-        
+               
+        df[['Time','Distance','Heartrate']] = df[['Time','Distance','Heartrate']].replace( 0, np.nan)
         df['Date'] = pd.to_datetime( df['Date'])
-        df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)
+        df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)   
         df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
-        df['TxHR'] = df.apply( lambda row: row.Time * row.Heartrate, axis = 1)
-        df['Heartrate'] = df['Heartrate'].replace( 0.0, np.nan)
+        df['TxHR'] = df.apply( lambda row: row.Time * row.Heartrate, axis = 1)         
         df['TxHR'] = df['TxHR'].replace( 0.0, np.nan)
         
-#        print( df)
-
         df = df.round( {'Distance':1, 'Time':0, 'Heartrate':0})
 
         return df
 
 
-    def days( self, sdate, edate):
+    def days( self):
         
-        phys = self.physicals( sdate, edate)
-        runs = self.druns( sdate, edate)
+        phys = self.physicals()
+        runs = self.druns()
 
         groupedruns = runs.groupby('Date').agg( {'Distance':'sum','Time':'sum','TxHR':'sum'}).reset_index()
         groupedruns['Pace'] = groupedruns.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
         groupedruns['Heartrate'] = groupedruns.apply( lambda row: row.TxHR / row.Time, axis = 1)
+        groupedruns['Heartrate'] = groupedruns['Heartrate'].replace( 0, np.nan)
         groupedruns = groupedruns.round( { 'Heartrate':0})
         groupedruns = groupedruns.drop( columns=['TxHR'])
 
@@ -165,7 +171,7 @@ class atleto:
 
         days = self.days
 
-        if agg == 'days':
+        if agg == 'days' or agg == 'd':
             return days
 
         df = pd.DataFrame()
@@ -175,19 +181,32 @@ class atleto:
         df['MaxWeight'] = days.Weight.resample( agg).max()
         df['Bodyfat'] = days.Bodyfat.resample( agg).mean()
         df['Distance'] = days.Distance.resample( agg).sum()
-        df['Time'] = days.Time.resample( agg).sum()
+        df['Time'] = days.Time.resample( agg).sum()        
         df['Heartrate'] = days.Heartrate.resample( agg).mean()
-        df['MinHeartrate'] = days.Heartrate.resample( agg).min()
         df['MaxHeartrate'] = days.Heartrate.resample( agg).max()
+        cols = ['Time','Distance','Heartrate','MaxHeartrate']
+        df[cols] = df[cols].replace( 0.0, np.nan)
+        
         df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
         df = df.round( {'Weight':1,'MinWeight':1,'MaxWeight':1, 'Bodyfat':1,
-                        'Distance':1, 'Time':0, 'Heartrate':0,'MinHeartrate':0,'MaxHeartrate':1})
+                        'Distance':1, 'Time':0, 'Heartrate':0,'MaxHeartrate':1})
 
         return df      
 
 
-def plotEasyPace( df):
+def plotEasyPace( df, minHR=130, maxHR=140):
    
+    df['Pace'] = pd.to_datetime( df['Pace'], format='%M:%S')
+
+    # filter out by distance and heartrate
+    df = df[(df['Distance'] <= 10.0) &
+            (df['Distance'] >= 5.0) &
+            (round(df['Heartrate']) <= maxHR) &
+            (round(df['Heartrate']) >= minHR)]
+
+    print( 'Min HR:', minHR)
+    print( 'Max HR:', maxHR)
+
     # Initialize Figure and Axes object
     # Get current size
     fig_size = plt.rcParams["figure.figsize"]
@@ -204,7 +223,7 @@ def plotEasyPace( df):
     y = dates.date2num( df['Pace'])
                  
     plt.ylabel('Pace (min/km)')
-    plt.scatter(x, y, s=20)
+    plt.scatter( x, y, s=20)
 
     # set axis ticks and labels
     ax.xaxis.set_major_formatter( dates.DateFormatter('%Y-%m-%d'))
