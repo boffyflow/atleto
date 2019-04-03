@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import jdutil as jd
+import atleto_util as au
 import datetime as dt
 import sqlite3
 import matplotlib.pyplot as plt
@@ -27,7 +28,7 @@ class atleto:
         df = pd.read_sql_query( querystring, conn)
 
         for index, row in df.iterrows():
-            df.at[index, 'Date'] = jdate( df.at[index,'day'])
+            df.at[index, 'Date'] = au.jdate( df.at[index,'day'])
 
         df = df.drop( columns=['day'])
         df['Date'] = pd.to_datetime( df['Date'])
@@ -46,8 +47,8 @@ class atleto:
 
         conn = sqlite3.connect( self.filename)
 
-        conn.create_function('jdate', 1, jdate)
-        conn.create_aggregate('avehr', 2, aveHR)
+        conn.create_function('jdate', 1, au.jdate)
+        conn.create_aggregate('avehr', 2, au.aveHR)
 
         sqlite3.enable_callback_tracebacks(True) 
 
@@ -84,8 +85,8 @@ class atleto:
 
         conn = sqlite3.connect( self.filename)
 
-        conn.create_function('jdate', 1, jdate)
-        conn.create_aggregate('avehr', 2, aveHR)
+        conn.create_function('jdate', 1, au.jdate)
+        conn.create_aggregate('avehr', 2, au.aveHR)
 
         sqlite3.enable_callback_tracebacks(True) 
 
@@ -104,7 +105,7 @@ class atleto:
         df[['Time','Distance','Heartrate']] = df[['Time','Distance','Heartrate']].replace( 0, np.nan)
         df['Date'] = pd.to_datetime( df['Date'])
         df['Distance'] = df.apply( lambda row: row.Distance * 0.001, axis = 1)   
-        df['Pace'] = df.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        df['Pace'] = df.apply( lambda row: au.pace( row.Time, row.Distance), axis = 1)
         df['TxHR'] = df.apply( lambda row: row.Time * row.Heartrate, axis = 1)         
         df['TxHR'] = df['TxHR'].replace( 0.0, np.nan)
         
@@ -118,7 +119,7 @@ class atleto:
         runs = self.druns()
 
         groupedruns = runs.groupby('Date').agg( {'Distance':'sum','Time':'sum','TxHR':'sum'}).reset_index()
-        groupedruns['Pace'] = groupedruns.apply( lambda row: pace( row.Time, row.Distance), axis = 1)
+        groupedruns['Pace'] = groupedruns.apply( lambda row: au.pace( row.Time, row.Distance), axis = 1)
         groupedruns['Heartrate'] = groupedruns.apply( lambda row: row.TxHR / row.Time, axis = 1)
         groupedruns['Heartrate'] = groupedruns['Heartrate'].replace( 0, np.nan)
         groupedruns = groupedruns.round( { 'Heartrate':0})
