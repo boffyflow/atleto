@@ -154,4 +154,19 @@ class atleto:
         df = df.round( {'Weight':1,'MinWeight':1,'MaxWeight':1, 'Bodyfat':1,
                         'Distance':1, 'Time':0, 'Heartrate':0,'MaxHeartrate':1})
 
-        return df      
+        return df
+
+    def races( self):
+
+        races = self.runs()
+
+        # filter out by distance and heartrate
+        return races[(races['RunType'] == 'race')]
+
+    def cur_vdot( self, day):
+        
+        # find the 3 closest races based on input date
+
+
+        return 99
+
