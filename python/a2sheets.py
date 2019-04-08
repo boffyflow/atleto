@@ -42,7 +42,7 @@ def main():
 
     print( 'Writing Weeks...')
     weeks = a.aggregate( 'W')
-    write2sheet( weeks, 'Weeks')
+   write2sheet( weeks, 'Weeks')
 
     print( 'Writing Months...')
     months = a.aggregate( 'M')
