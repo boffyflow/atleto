@@ -91,7 +91,7 @@
 			echo "</td><td>";
 			$agp = (float) $result['pl_division'];
 			$agn = (float) $result['num_division'];
-			echo round( 100.0 * $agp / $agn, 1);
+			echo round( 100.0 * $agp / $agn, 1) . " %";
 			echo "</td></tr>\n";
         }
 
