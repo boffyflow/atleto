@@ -61,7 +61,7 @@
 		$race_ids = race_ids( $year);
 		$alt = true;
 		
-		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th></tr>";
+		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th><th>Percentile</th></tr>";
 		
 		foreach( $race_ids as $value)
         {
@@ -88,6 +88,10 @@
 			echo $result['pl_overall'] . "/" . $result['num_overall'];
 			echo "</td><td>";
 			echo $result['pl_division'] . "/" . $result['num_division'];
+			echo "</td><td>";
+			$agp = (float) $result['pl_division'];
+			$agn = (float) $result['num_division'];
+			echo round( 100.0 * $agp / $agn, 1);
 			echo "</td></tr>\n";
         }
 
