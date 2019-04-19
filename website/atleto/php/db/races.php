@@ -85,8 +85,8 @@
 			echo "</td><td>";
 			echo totalTime( $result['chiptime'], true);
 			echo "</td><td>";
-			$ogp = (float) $result['pl_division'];
-			$ogn = (float) $result['num_division'];
+			$ogp = (float) $result['pl_overall'];
+			$ogn = (float) $result['num_overall'];
 			echo $result['pl_overall'] . "/" . $result['num_overall'] . " (" . round( 100.0 * $ogp / $ogn, 1) . " %)";
 			echo "</td><td>";
 			$agp = (float) $result['pl_division'];
