@@ -2,6 +2,16 @@
 
 	include $_SERVER[ 'DOCUMENT_ROOT'] . "/php/global_inc.php";
 	
+	function vdot( $dist, $secs)
+	{
+		$tt = $secs / 60.0;
+
+		$c = -4.6 + 0.182258 * $dist / $tt + 0.000104 * $dist * $dist / $tt / $tt;
+		$i = 0.8 + 0.1894393 * exp( -0.012778 * $tt) + 0.2989558 * exp( -0.1932605 * $tt);
+
+		return $c / $i;
+	}
+
 	function isItemSelected( $combo, $item)
 	{
 		if( $combo == "raceYear")
@@ -61,7 +71,7 @@
 		$race_ids = race_ids( $year);
 		$alt = true;
 		
-		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th></tr>";
+		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th><th>VDOT</th></tr>";
 		
 		foreach( $race_ids as $value)
         {
@@ -92,6 +102,8 @@
 			$agp = (float) $result['pl_division'];
 			$agn = (float) $result['num_division'];
 			echo $result['pl_division'] . "/" . $result['num_division'] . " (" . round( 100.0 * $agp / $agn, 1) . " %)";;
+			echo "</td><td>";
+			echo round( vdot( $run->total_distance(), $run->total_time()), 1);
 			echo "</td></tr>\n";
         }
 
