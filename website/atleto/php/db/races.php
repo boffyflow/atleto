@@ -71,7 +71,8 @@
 		$race_ids = race_ids( $year);
 		$alt = true;
 		
-		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th><th>VDOT</th></tr>";
+/*		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th><th>VDOT</th></tr>"; */
+		echo "<tr><th>Date</th><th>Race</th><th>Distance</th><th>Gun Time</th><th>Pace</th><th>Chip Time</th><th>Overall</th><th>Age Group</th></tr>";
 		
 		foreach( $race_ids as $value)
         {
@@ -102,8 +103,8 @@
 			$agp = (float) $result['pl_division'];
 			$agn = (float) $result['num_division'];
 			echo $result['pl_division'] . "/" . $result['num_division'] . " (" . round( 100.0 * $agp / $agn, 1) . " %)";;
-			echo "</td><td>";
-			echo round( vdot( $run->total_distance(), $result['chiptime']), 1);
+/*			echo "</td><td>";
+			echo round( vdot( $run->total_distance(), $result['chiptime']), 1);  */
 			echo "</td></tr>\n";
         }
 
