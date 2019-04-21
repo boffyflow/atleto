@@ -103,7 +103,7 @@
 			$agn = (float) $result['num_division'];
 			echo $result['pl_division'] . "/" . $result['num_division'] . " (" . round( 100.0 * $agp / $agn, 1) . " %)";;
 			echo "</td><td>";
-			echo round( vdot( $run->total_distance(), $run->total_time()), 1);
+			echo round( vdot( $run->total_distance(), $result['chiptime']), 1);
 			echo "</td></tr>\n";
         }
 
