@@ -1,14 +1,14 @@
-import atleto as atl
+import atleto_data as atl
 import datetime as dt
 import argparse
-from df2gspread import df2gspread as d2g
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
+from gspread_dataframe import set_with_dataframe
 
 
 def parse_args():
 
-    parser = argparse.ArgumentParser(description='Simple Sphere Fitting')
+    parser = argparse.ArgumentParser(description='Python Atleto')
 
     parser.add_argument('-i','--input',default='../website/atleto/data/atleto_data.atl',required=False,help='Name of the text file containing the 3D points in XYZ (required)')
     parser.add_argument('-s','--startdate',default='1900-01-01',required=False,help='Start date formatted as YYYY-MM-DD (default is 1900-01-01')
@@ -19,13 +19,27 @@ def parse_args():
 
 def write2sheet( df, worksheet):
 
-    scope = ['https://spreadsheets.google.com/feeds']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('./Jupyter-27d0cada520a.json', scope)
-    gc = gspread.authorize(credentials)
-    spreadsheet_key = '1p9s_2skvkIx1xJ0Ui7AbVW_aUMkb7ThLRehj1fyC-yg'
 
-    d2g.upload( df, spreadsheet_key, worksheet, start_cell='A2', credentials=credentials,
-        clean=False, col_names=False, row_names=True) #, df_size=True)
+    # quthorize the Google API
+    scope = [
+         'https://www.googleapis.com/auth/drive',
+         'https://www.googleapis.com/auth/drive.file'
+         ]
+        
+    file_name = 'client_key.json'
+    creds = ServiceAccountCredentials.from_json_keyfile_name( file_name, scope)
+    client = gspread.authorize( creds)
+
+    spreadsheet = client.open( 'atleto_data')
+
+    ws = spreadsheet.worksheet( worksheet)
+
+#    df = df.fillna('')
+    print( df)
+#    ws.update( 'A2:A', df['Weight'].tolist())
+    set_with_dataframe( ws, df)
+#    d2g.upload( df, spreadsheet_key, worksheet, start_cell='A2', credentials=credentials,
+#        clean=False, col_names=False, row_names=True) #, df_size=True)
 
 
 def main():
@@ -33,6 +47,9 @@ def main():
 
     sd = dt.datetime.strptime( args.startdate, '%Y-%m-%d')
     ed = dt.datetime.strptime( args.enddate, '%Y-%m-%d')
+
+    print( 'start date:', sd)
+    print( '  end date:', ed)
 
     a = atl.atleto( args.input, sd, ed)
 
@@ -42,7 +59,7 @@ def main():
 
     print( 'Writing Weeks...')
     weeks = a.aggregate( 'W')
-   write2sheet( weeks, 'Weeks')
+    write2sheet( weeks, 'Weeks')
 
     print( 'Writing Months...')
     months = a.aggregate( 'M')
